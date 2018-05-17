@@ -3,14 +3,16 @@ from keras.layers import Reshape, Flatten, Dropout, Concatenate
 from keras.callbacks import ModelCheckpoint
 from keras.optimizers import Adam
 from keras.models import Model
+import numpy as np
+from numpy.random import *
 
-def model_make():
+def model_make(input_shape):
     filter_sizes = [3,4,5]
     num_filters = 20
     drop = 0.5
 
-    inputs = Input(shape=(240,20), dtype='float32')
-    reshape = Reshape((240,20,1))(inputs)
+    inputs = Input(shape=input_shape, dtype='float32')
+    reshape = Reshape((input_shape[0],input_shape[1],1))(inputs)
 
     conv_0 = Conv2D(num_filters, kernel_size=(filter_sizes[0], 20), padding='valid', kernel_initializer='normal', activation='relu')(reshape)
     conv_1 = Conv2D(num_filters, kernel_size=(filter_sizes[1], 20), padding='valid', kernel_initializer='normal', activation='relu')(reshape)
@@ -30,4 +32,4 @@ def model_make():
     model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     
     return model
-    
+
